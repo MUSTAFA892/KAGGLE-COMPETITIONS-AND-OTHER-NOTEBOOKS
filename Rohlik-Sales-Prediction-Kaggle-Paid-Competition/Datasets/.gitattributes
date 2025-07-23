@@ -1,0 +1,9 @@
+calendar.csv filter=lfs diff=lfs merge=lfs -text
+inventory.csv filter=lfs diff=lfs merge=lfs -text
+sales_test.csv filter=lfs diff=lfs merge=lfs -text
+sales_train.csv filter=lfs diff=lfs merge=lfs -text
+solution.csv filter=lfs diff=lfs merge=lfs -text
+test_weights.csv filter=lfs diff=lfs merge=lfs -text
+Final_data.csv filter=lfs diff=lfs merge=lfs -text
+*.csv !text !filter !merge !diff
+*.csv filter=lfs diff=lfs merge=lfs -text
