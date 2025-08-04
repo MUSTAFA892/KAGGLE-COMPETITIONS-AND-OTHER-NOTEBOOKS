@@ -1,0 +1,3 @@
+Age,"Sex (0: Female, 1: Male)",Chest Pain Type (cp),Resting BP (trestbps),Cholesterol (chol),RestECG,Max Heart Rate (thalach),Exercise Induced Angina (exang),ST Depression (oldpeak),Slope,Major Vessels (ca),"Thal (0=Normal, 1=Fixed, 2=Reversible)",output,timestamp
+0,0,0,0,0,0,0,0,0,0,0,0,No Disease 💖,2025-08-04 20:35:51.797739
+0,0,0,0,0,0,0,0,0,0,0,0,No Disease 💖,2025-08-04 20:35:53.503651
