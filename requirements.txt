@@ -4,3 +4,4 @@ numpy
 scikit-learn
 matplotlib
 gradio #for web interface
+mlxtend
