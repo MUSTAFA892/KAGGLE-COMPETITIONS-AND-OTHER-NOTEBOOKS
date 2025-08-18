@@ -16,32 +16,55 @@ df = pd.DataFrame(encoder_ary, columns=encoder.columns_)
 frequent_itemsets = apriori(df, min_support=0.01, use_colnames=True)
 rules = association_rules(frequent_itemsets, metric="lift", min_threshold=0.03)
 
+# All products for checkboxes
+all_products = sorted(df.columns.tolist())
+
 # Recommendation function
-def recommend(product):
-    prd = product.lower()
-    prd_rules = rules[rules['antecedents'].apply(lambda x: prd in x)]
+def recommend(selected_products):
+    if not selected_products:
+        return "⚠️ Please select at least one product."
+    
+    selected_set = set([p.lower() for p in selected_products])
+    
+    # Find rules where ANY of the selected products are in antecedents
+    prd_rules = rules[rules['antecedents'].apply(lambda x: len(selected_set.intersection(x)) > 0)]
+    
     if not prd_rules.empty:
-        # Flatten consequents
-        items = set()
-        for cons in prd_rules['consequents']:
-            items.update(cons)  # unpack frozenset
+        # Collect consequents with score
+        recs = []
+        for _, row in prd_rules.iterrows():
+            for cons in row['consequents']:
+                if cons not in selected_set:
+                    recs.append((cons, row['lift'], row['support']))
         
-        # Pick top 10 recommendations
-        top_items = list(items)[:10]
+        if not recs:
+            return f"No new recommendations found for {', '.join(selected_products)}"
         
-        # Format in bullet points
-        formatted = "\n".join([f"• {item}" for item in top_items])
-        return f"Top recommendations for '{prd}':\n\n{formatted}"
+        # Sort by lift (stronger recommendations first)
+        recs = sorted(recs, key=lambda x: (-x[1], -x[2]))
+        
+        # Take top 10 unique recommendations
+        seen = set()
+        top_items = []
+        for item, lift, support in recs:
+            if item not in seen:
+                seen.add(item)
+                top_items.append(f"• {item}")
+            if len(top_items) >= 10:
+                break
+        
+        return f"Since you selected {', '.join(selected_products)}, you may also like:\n\n" + "\n".join(top_items)
+    
     else:
-        return f"No recommendations found for '{prd}'"
+        return f"No recommendations found for {', '.join(selected_products)}"
 
 # Gradio app
 demo = gr.Interface(
     fn=recommend,
-    inputs=gr.Textbox(label="Enter a product name"),
+    inputs=gr.CheckboxGroup(choices=all_products, label="Select the products you are buying"),
     outputs=gr.Textbox(label="Recommendations"),
-    title="Market Basket Recommendation",
-    description="Enter a product name to see frequently bought-together items."
+    title="Smart Market Basket Recommendation",
+    description="Select multiple products to get recommendations for other frequently bought-together items."
 )
 
 if __name__ == "__main__":
