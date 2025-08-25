@@ -1,4 +1,4 @@
-# 🏆KAGGLE\_COMPETITION\_AND\_OTHER\_NOTEBOOKS
+# KAGGLE\_COMPETITION\_AND\_OTHER\_NOTEBOOKS
 
 This repository contains a collection of **Kaggle competition solutions** as well as **standalone machine learning notebooks**. It features complete data pipelines, exploratory analyses, model development, evaluation techniques, and more — offering both competition-specific and general ML problem-solving examples.
 
